@@ -101,6 +101,11 @@ namespace Henry_Danger_saves_Jasper_remake
             p.Location = new Point(x, y);
         }
 
+        public Point getCoordinates()
+        {
+            return p.Location;
+        }
+
         public void increaseWidth(int x)
         {
             p.Width += x;
@@ -164,6 +169,11 @@ namespace Henry_Danger_saves_Jasper_remake
         public bool isFrozen()
         {
             return frozen;
+        }
+
+        public bool isVisible()
+        {
+            return p.Visible;
         }
     }
 }
