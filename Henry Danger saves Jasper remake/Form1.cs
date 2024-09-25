@@ -31,8 +31,9 @@ namespace Henry_Danger_saves_Jasper_remake
         ButonPictura Flashlight, Superglue, Witch, Guitar, Watergun;
         ButonPictura RightArrow, LeftArrow, X, Green;
         ButonPictura BackToGame, Lose1, Slenderman, Paper, Mess, CloseMessage, Entrance;
-        ButonPictura RightArrow2, Box, Termite, Six, JeffTheKiller, LightSwitch, Lose2, Lose3;
+        ButonPictura RightArrow2, Box, Termite, Six, JeffTheKiller, LightSwitch, Lose2, Lose3, Lose4;
         int no_clicks_park_map = 0, combined_glue_with_watergun = 0, x_was_glued = 0, subway_defeated = 0, pressed_light_switch = 0;
+        int jeff_blinded_with_flashlight = 0;
         int message_read = 0;
         int slendy = 0;
         int entrance = 0;
@@ -95,7 +96,8 @@ namespace Henry_Danger_saves_Jasper_remake
             LightSwitch = new ButonPictura("LightSwitch.png", 120, 200, 20, 20, this, LightSwitchClick);
             Lose2 = new ButonPictura("Lose2.png", 0, 0, 800, 480, this);
             Lose3 = new ButonPictura("Lose3.png", 0, 0, 800, 480, this);
-            ButonPictura.variableDisappear(Mess, CloseMessage, Entrance, RightArrow2, JeffTheKiller, LightSwitch, Lose2, Lose3);
+            Lose4 = new ButonPictura("Lose4.png", 0, 0, 800, 480, this);
+            ButonPictura.variableDisappear(Mess, CloseMessage, Entrance, RightArrow2, JeffTheKiller, LightSwitch, Lose2, Lose3, Lose4);
         }
 
         private async void ParkMapClick(object sender, EventArgs e)
@@ -517,12 +519,34 @@ namespace Henry_Danger_saves_Jasper_remake
                 ButonPictura.variableDisappear(JeffTheKiller, LightSwitch);
                 Tex.Visible = false;
                 ButonPictura.variableAppear(true, RightArrow2);
-                pressed_light_switch = 1;
+                pressed_light_switch = 0;
                 Hideout.setImage("Room.png");
                 JeffTheKiller.setImage("JeffTheKiller.png");
                 Lose2.setCoordinates(0, 0);
                 LightSwitch.setCoordinates(120, 200);
                 ButonPictura.variableDisappear(Lose3, BackToGame);
+                return;
+            }
+
+            if (Lose4.isVisible())
+            {
+                
+                Lose2.disappear();
+                Lose4.disappear();
+                ButonPictura.variableReactivate(Map);
+                BackToGame.disappear();
+                ButonPictura.variableDisappear(JeffTheKiller, LightSwitch);
+                Tex.Visible = false;
+                ButonPictura.variableAppear(true, RightArrow2);
+                pressed_light_switch = 0;
+                jeff_blinded_with_flashlight = 0;
+                Hideout.setImage("Room.png");
+                JeffTheKiller.setImage("JeffTheKiller.png");
+                Lose2.setCoordinates(0, 0);
+                Lose3.setCoordinates(0, 0);
+                LightSwitch.setCoordinates(120, 200);
+                ButonPictura.variableDisappear(Lose3, BackToGame);
+                ButonPictura.variableReactivate(Flashlight, Termite, Guitar, Watergun, Six);
                 return;
             }
         }
@@ -649,17 +673,51 @@ namespace Henry_Danger_saves_Jasper_remake
             BackToGame.setCoordinates(10000, 10000);
             Hideout.setImage("RoomDark.png");
             JeffTheKiller.setImage("JeffDark.png");
-            await Task.Delay(3000);
-            ButonPictura.variableAppear(true, Lose3, BackToGame);
-            BackToGame.setCoordinates(300, 350);
+            await Task.Delay(3000);          
+            if(jeff_blinded_with_flashlight == 0)
+            {
+                BackToGame.setCoordinates(300, 350);
+                Green.disappear();
+                NameOfObject.Visible = false;
+                ButonPictura.variableAppear(true, Lose3, BackToGame);
+            }
             Lose2.disappear();
-            Green.disappear();
-            NameOfObject.Visible = false;
         }
 
-        private void JeffTheKillerClick(object sender, EventArgs e)
+        private async void JeffTheKillerClick(object sender, EventArgs e)
         {
-
+            if(JeffTheKiller.isFrozen())
+            {
+                return;
+            }
+            if (Green.getP().Location.X + 7 == Flashlight.getP().Location.X && Green.getP().Visible == true
+                && Green.getP().Location.Y + 7 == Flashlight.getP().Location.Y && pressed_light_switch == 1)
+            {
+                ButonPictura.variableFreeze(Flashlight, Termite, Guitar, Watergun, Six);
+                Green.disappear();
+                NameOfObject.Visible = false;
+                jeff_blinded_with_flashlight = 1;
+                Lose3.disappear();
+                JeffTheKiller.disappear();
+                Lose3.setCoordinates(10000, 10000);
+                BackToGame.setCoordinates(10000, 10000);
+                Hideout.setImage("HenryLanternAttack.png");
+                Tex.Visible = false;             
+                await Task.Delay(1500);
+                Hideout.setImage("RoomDark.png");
+                ButonPictura.variableReactivate(Flashlight, Termite, Guitar, Watergun, Six);
+                JeffTheKiller.appear(true);
+                speak("Ahhhh!! I can't see dammit...", 365, 160, 100, 60);
+                await Task.Delay(3000);
+                ButonPictura.variableFreeze(Flashlight, Termite, Guitar, Watergun, Six);
+                speak("Hehehe, I can see again, you'll pay dearly for this...", 365, 160, 100, 60);
+                Green.disappear();
+                NameOfObject.Visible = false;
+                await Task.Delay(3000);
+                BackToGame.setCoordinates(300, 350);
+                ButonPictura.variableAppear(true, Lose4, BackToGame);
+                return;
+            }
         }
     }
 }
