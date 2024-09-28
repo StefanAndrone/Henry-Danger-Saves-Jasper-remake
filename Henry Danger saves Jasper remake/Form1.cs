@@ -29,9 +29,10 @@ namespace Henry_Danger_saves_Jasper_remake
         ButonPictura Inventory;
         ButonPictura Slot1, Slot2, Slot3, Slot4, Slot5, Slot6;
         ButonPictura Flashlight, Superglue, Witch, Guitar, Watergun;
-        ButonPictura RightArrow, LeftArrow, X, Green;
+        ButonPictura RightArrow, LeftArrow, X, Green, RightArrow3;
         ButonPictura BackToGame, Lose1, Slenderman, Paper, Mess, CloseMessage, Entrance;
-        ButonPictura RightArrow2, Box, Termite, Six, JeffTheKiller, LightSwitch, Lose2, Lose3, Lose4, JeffInventory;
+        ButonPictura RightArrow2, Box, Termite, Six, JeffTheKiller, LightSwitch, Lose2, Lose3, Lose4, JeffInventory, Lose5, SlendermanInventory;
+        ButonPictura DoorButton;
         int no_clicks_park_map = 0, combined_glue_with_watergun = 0, x_was_glued = 0, subway_defeated = 0, pressed_light_switch = 0;
         int jeff_blinded_with_flashlight = 0, jeff_attacked = 0;
         int message_read = 0;
@@ -89,16 +90,20 @@ namespace Henry_Danger_saves_Jasper_remake
             CloseMessage = new ButonPictura("CloseMessage.png", 700, 400, 50, 50, this, CloseMessageClick);
             Entrance = new ButonPictura("Entrance.png", 350, 150, 50, 50, this, EntranceClick);
             RightArrow2 = new ButonPictura("RightArrow2.png", 10000, 10000, 50, 50, this, RightArrow2Click);
+            RightArrow3 = new ButonPictura("RightArrow2.png", 10000, 10000, 50, 50, this);
             Box = new ButonPictura("Box.png", 10000, 10000, 50, 50, this, BoxClick);
             Six = new ButonPictura("6.png", 10000, 10000, 60, 60, this, SixClick);
             Termite = new ButonPictura("Termite.png", 10000, 10000, 60, 60, this, TermiteClick);
             JeffTheKiller = new ButonPictura("JeffTheKiller.png", 470, 165, 100, 270, this, JeffTheKillerClick);
             JeffInventory = new ButonPictura("JeffInventory.png", 10000, 10000, 60, 60, this, JeffInventoryClick);
+            SlendermanInventory = new ButonPictura("SlendermanInventory.png", 10000, 10000, 60, 60, this, SlendermanInventoryClick);
             LightSwitch = new ButonPictura("LightSwitch.png", 120, 200, 20, 20, this, LightSwitchClick);
             Lose2 = new ButonPictura("Lose2.png", 0, 0, 800, 480, this);
             Lose3 = new ButonPictura("Lose3.png", 0, 0, 800, 480, this);
             Lose4 = new ButonPictura("Lose4.png", 0, 0, 800, 480, this);
-            ButonPictura.variableDisappear(Mess, CloseMessage, Entrance, RightArrow2, JeffTheKiller, LightSwitch, Lose2, Lose3, Lose4);
+            Lose5 = new ButonPictura("Lose5.png", 0, 0, 800, 480, this);
+            DoorButton = new ButonPictura("Slot.png", 10000, 10000, 44, 168, this, DoorButtonClick);
+            ButonPictura.variableDisappear(Mess, CloseMessage, Entrance, RightArrow2, JeffTheKiller, LightSwitch, Lose2, Lose3, Lose4, Lose5);
         }
 
         private async void ParkMapClick(object sender, EventArgs e)
@@ -148,7 +153,7 @@ namespace Henry_Danger_saves_Jasper_remake
             ButonPictura.variableDisappear(SubwayMap, HideoutMap, ParkMap, Subway, Hideout);
             ButonPictura.variableAppear(true, Park, Map);
             ButonPictura.variableAppear(true, Inventory, Slot1, Slot2, Slot3, Slot4, Slot5, Slot6);
-            ButonPictura.variableAppear(true, Flashlight, Superglue, Witch, Watergun, Guitar, Termite, Six, JeffInventory);
+            ButonPictura.variableAppear(true, Flashlight, Superglue, Witch, Watergun, Guitar, Termite, Six, JeffInventory, SlendermanInventory);
         }
 
         private void SubwayMapClick(object sender, EventArgs e)
@@ -157,7 +162,7 @@ namespace Henry_Danger_saves_Jasper_remake
             ButonPictura.variableAppear(true, Subway, Map);
             ButonPictura.variableAppear(true, Inventory, Slot1, Slot2, Slot3, Slot4, Slot5, Slot6);
             ButonPictura.variableAppear(true, Flashlight, Superglue, Witch, Watergun, Guitar, RightArrow, X,
-                Termite, Six, JeffInventory);
+                Termite, Six, JeffInventory, SlendermanInventory);
             if(slendy == 1)
             {
                 Slenderman.appear(true);
@@ -171,7 +176,7 @@ namespace Henry_Danger_saves_Jasper_remake
             ButonPictura.variableAppear(true, Hideout, Map);
             ButonPictura.variableAppear(true, Inventory, Slot1, Slot2, Slot3, Slot4, Slot5, Slot6);
             ButonPictura.variableAppear(true, Flashlight, Superglue, Witch, Watergun, Guitar, Box,
-                Termite, Six, RightArrow2, JeffInventory);
+                Termite, Six, RightArrow2, JeffInventory, SlendermanInventory, DoorButton, RightArrow3);
             if(entrance == 1)
             {
                 Entrance.appear(true);
@@ -187,7 +192,8 @@ namespace Henry_Danger_saves_Jasper_remake
                 ButonPictura.variableAppear(true, SubwayMap, HideoutMap, ParkMap);
                 ButonPictura.variableDisappear(Inventory, Slot1, Slot2, Slot3, Slot4, Slot5, Slot6, Green);
                 ButonPictura.variableDisappear(Flashlight, Superglue, Witch, Watergun, Guitar, RightArrow, 
-                X, Slenderman, Paper, Entrance, Termite, Six, RightArrow2, JeffInventory);
+                X, Slenderman, Paper, Entrance, Termite, Six, RightArrow2, JeffInventory, SlendermanInventory,
+                DoorButton, RightArrow3);
             }
         }
 
@@ -550,11 +556,56 @@ namespace Henry_Danger_saves_Jasper_remake
                 ButonPictura.variableReactivate(Flashlight, Termite, Guitar, Watergun, Six);
                 return;
             }
+
+            if(Lose5.isVisible())
+            {
+                ButonPictura.variableReactivate(Flashlight, Watergun, JeffInventory, Guitar, Six, Termite, Map, SlendermanInventory);
+                ButonPictura.variableAppear(true, RightArrow2);
+                ButonPictura.variableDisappear(Lose5, BackToGame);
+                Tex.Visible = false;
+                Hideout.setImage("Room.png");
+                return;
+            }
         }
 
         private async void SlendermanClick(object sender, EventArgs e)
         {
-            Green.disappear();
+            if(Slenderman.isFrozen())
+            {
+                return;
+            }
+            if (Green.getP().Location.X + 7 == JeffInventory.getP().Location.X && Green.getP().Visible == true
+                && Green.getP().Location.Y + 7 == JeffInventory.getP().Location.Y)
+            {
+                Green.disappear();
+                NameOfObject.Visible = false;
+                ButonPictura.variableFreeze(Inventory, Slot1, Slot2, Slot3, Slot4, Slot5, Slot6, Map);
+                ButonPictura.variableFreeze(Flashlight, Guitar, Watergun, Slenderman, Six, Termite);
+                JeffInventory.dispose();
+                Paper.dispose();
+                Slenderman.freeze();
+                speak("Hello Slenderman, I have a deal for you...", 230, 200, 100, 40);
+                await Task.Delay(3000);
+                speak("It better be good Kid Danger, you think I can't kidnap you too?", 430, 200, 100, 60);
+                await Task.Delay(4000);
+                speak("I need your help in a mission, in exchange I have your nemesis...", 230, 200, 100, 60);
+                await Task.Delay(4000);
+                speak("I'll believe it when I see it man...", 430, 200, 100, 40);
+                await Task.Delay(4000);
+                Subway.setImage("HenryBringingJeff.png");
+                speak("Is this believable enough?...", 230, 200, 100, 40);
+                await Task.Delay(3000);
+                speak("Oh boy, finally I have Jeff at my mercy... I owe you. Fine. I'll come with you...", 430, 200, 100, 80);
+                await Task.Delay(5000);
+                Tex.Visible = false;
+                SlendermanInventory.setCoordinates(150, 80);
+                Subway.setImage("Subway8.png");
+                Slenderman.dispose();
+                ButonPictura.variableReactivate(Inventory, Slot1, Slot2, Slot3, Slot4, Slot5, Slot6, Map);
+                ButonPictura.variableReactivate(Flashlight, Guitar, Watergun, Slenderman, Six, Termite);
+                DoorButton.setCoordinates(729, 200);
+                return;
+            }
             ButonPictura.variableFreeze(Inventory, Slot1, Slot2, Slot3, Slot4, Slot5, Slot6, Map);
             ButonPictura.variableFreeze(Flashlight, Guitar, Watergun, Paper, Slenderman, Six, Termite);
             speak("Talking to Slenderman without a very, very, very good reason is a bad idea...", 230, 200, 100, 80);
@@ -668,6 +719,22 @@ namespace Henry_Danger_saves_Jasper_remake
                 }
                 return;
             }
+            ButonPictura.variableFreeze(Flashlight, Watergun, JeffInventory, Guitar, Six, Termite, Map, SlendermanInventory);
+            Green.disappear();
+            NameOfObject.Visible = false;
+            RightArrow2.disappear();
+            Hideout.setImage("Toddler1.png");
+            await Task.Delay(1000);
+            Hideout.setImage("Toddler2.png");
+            await Task.Delay(1000);
+            Hideout.setImage("Toddler3.png");
+            await Task.Delay(1000);
+            Hideout.setImage("Toddler4.png");
+            await Task.Delay(1000);
+            speak("Remember the bottomless ball pit Henry Hart? This is even worse my friend...", 365, 160, 100, 80);
+            await Task.Delay(3000);
+            BackToGame.setCoordinates(300, 350);
+            ButonPictura.variableAppear(true, Lose5, BackToGame);
             return;
         }
 
@@ -741,6 +808,7 @@ namespace Henry_Danger_saves_Jasper_remake
                 ButonPictura.variableFreeze(Flashlight, Termite, Guitar, Watergun, Six);
                 Green.disappear();
                 NameOfObject.Visible = false;
+                Lose4.disappear();
                 ButonPictura.variableDispose(Lose2, Lose3, Lose4, JeffTheKiller);
                 BackToGame.setCoordinates(10000, 10000);
                 speak("Guess what Jeff, you're the one who will see...", 285, 160, 100, 60);
@@ -784,6 +852,64 @@ namespace Henry_Danger_saves_Jasper_remake
             NameOfObject.Visible = true;
             NameOfObject.BringToFront();
             ButonPictura.variableAppear(true, Green, JeffInventory);
+        }
+
+        private void SlendermanInventoryClick(object sender, EventArgs e)
+        {
+            if (SlendermanInventory.isFrozen())
+            {
+                return;
+            }
+            if (Green.getP().Location.X + 7 == SlendermanInventory.getP().Location.X && Green.getP().Visible == true
+                && Green.getP().Location.Y + 7 == SlendermanInventory.getP().Location.Y)
+            {
+                NameOfObject.Visible = false;
+                Green.disappear();
+                return;
+            }
+            Green.setCoordinates(SlendermanInventory.getP().Location.X - 7, SlendermanInventory.getP().Location.Y - 7);
+            NameOfObject.Text = "Slenderman";
+            NameOfObject.Visible = true;
+            NameOfObject.BringToFront();
+            ButonPictura.variableAppear(true, Green, SlendermanInventory);
+        }
+
+        private async void DoorButtonClick(object sender, EventArgs e)
+        {
+            if(DoorButton.isFrozen()) { 
+                return;
+            }
+            if (Green.getP().Location.X + 7 == SlendermanInventory.getP().Location.X && Green.getP().Visible == true
+                && Green.getP().Location.Y + 7 == SlendermanInventory.getP().Location.Y)
+            {
+                RightArrow2.dispose();
+                DoorButton.dispose();
+                SlendermanInventory.dispose();
+                ButonPictura.variableFreeze(Flashlight, Watergun, Guitar, Six, Termite, Map);
+                Green.disappear();
+                NameOfObject.Visible = false;
+                Hideout.setImage("Toddler5.png");
+                await Task.Delay(1000);
+                Hideout.setImage("Toddler6.png");
+                speak("Oh shit...", 465, 160, 100, 20);
+                await Task.Delay(2000);
+                Hideout.setImage("Toddler7.png");
+                speak("Henry Hart! This is your doing?", 465, 160, 100, 40);
+                await Task.Delay(3000);
+                speak("How do you even know my identity?", 205, 160, 100, 40);
+                await Task.Delay(3000);
+                speak("Well Jasper was forced by my boss Drex to tell him everything...", 465, 160, 100, 80);
+                await Task.Delay(4000);
+                speak("Drex is behind this? Seriously?", 205, 160, 100, 40);
+                await Task.Delay(3000);
+                speak("Now you're coming with me...", 365, 160, 100, 40);
+                await Task.Delay(3000);
+                Tex.Visible = false;
+                Hideout.setImage("Toddler8.png");
+                ButonPictura.variableReactivate(Flashlight, Watergun, Guitar, Six, Termite, Map);
+                RightArrow3.setCoordinates(675, 370);
+                return;
+            }
         }
     }
 }
