@@ -166,6 +166,14 @@ namespace Henry_Danger_saves_Jasper_remake
             }
         }
 
+        public static void variableMoveAway(params ButonPictura[] args)
+        {
+            foreach (ButonPictura arg in args)
+            {
+                arg.setCoordinates(10000, 10000);
+            }
+        }
+
         public bool isFrozen()
         {
             return frozen;

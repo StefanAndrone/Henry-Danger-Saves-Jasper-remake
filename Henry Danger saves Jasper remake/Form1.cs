@@ -32,12 +32,13 @@ namespace Henry_Danger_saves_Jasper_remake
         ButonPictura RightArrow, LeftArrow, X, Green, RightArrow3;
         ButonPictura BackToGame, Lose1, Slenderman, Paper, Mess, CloseMessage, Entrance;
         ButonPictura RightArrow2, Box, Termite, Six, JeffTheKiller, LightSwitch, Lose2, Lose3, Lose4, JeffInventory, Lose5, SlendermanInventory;
-        ButonPictura DoorButton;
+        ButonPictura DoorButton, TimeJerker, But, Lose6, Lose7;
         int no_clicks_park_map = 0, combined_glue_with_watergun = 0, x_was_glued = 0, subway_defeated = 0, pressed_light_switch = 0;
         int jeff_blinded_with_flashlight = 0, jeff_attacked = 0;
         int message_read = 0;
         int slendy = 0;
         int entrance = 0;
+        int no_clicks_rightarrow3 = 0, turned = 0, six_thrown_wrong = 0, six_thrown_right = 0, time_jerker_defeated = 0;
 
         public void speak(String text, int x, int y, int width, int height)
         {
@@ -90,7 +91,7 @@ namespace Henry_Danger_saves_Jasper_remake
             CloseMessage = new ButonPictura("CloseMessage.png", 700, 400, 50, 50, this, CloseMessageClick);
             Entrance = new ButonPictura("Entrance.png", 350, 150, 50, 50, this, EntranceClick);
             RightArrow2 = new ButonPictura("RightArrow2.png", 10000, 10000, 50, 50, this, RightArrow2Click);
-            RightArrow3 = new ButonPictura("RightArrow2.png", 10000, 10000, 50, 50, this);
+            RightArrow3 = new ButonPictura("RightArrow2.png", 10000, 10000, 50, 50, this, RightArrow3Click);
             Box = new ButonPictura("Box.png", 10000, 10000, 50, 50, this, BoxClick);
             Six = new ButonPictura("6.png", 10000, 10000, 60, 60, this, SixClick);
             Termite = new ButonPictura("Termite.png", 10000, 10000, 60, 60, this, TermiteClick);
@@ -102,8 +103,13 @@ namespace Henry_Danger_saves_Jasper_remake
             Lose3 = new ButonPictura("Lose3.png", 0, 0, 800, 480, this);
             Lose4 = new ButonPictura("Lose4.png", 0, 0, 800, 480, this);
             Lose5 = new ButonPictura("Lose5.png", 0, 0, 800, 480, this);
+            Lose6 = new ButonPictura("Lose6.png", 0, 0, 800, 480, this);
+            Lose7 = new ButonPictura("Lose7.png", 0, 0, 800, 480, this);
             DoorButton = new ButonPictura("Slot.png", 10000, 10000, 44, 168, this, DoorButtonClick);
-            ButonPictura.variableDisappear(Mess, CloseMessage, Entrance, RightArrow2, JeffTheKiller, LightSwitch, Lose2, Lose3, Lose4, Lose5);
+            But = new ButonPictura("Button.png", 10000, 10000, 40, 40, this, ButClick);
+            TimeJerker = new ButonPictura("TimeJerker.png", 10000, 10000, 100, 270, this, TimeJerkerClick);
+            ButonPictura.variableDisappear(Mess, CloseMessage, Entrance, RightArrow2, JeffTheKiller, LightSwitch, Lose2, Lose3, Lose4, Lose5,
+                Lose6, Lose7);
         }
 
         private async void ParkMapClick(object sender, EventArgs e)
@@ -180,6 +186,10 @@ namespace Henry_Danger_saves_Jasper_remake
             if(entrance == 1)
             {
                 Entrance.appear(true);
+            }
+            if(time_jerker_defeated == 1)
+            {
+                But.appear(true);
             }
         }
 
@@ -566,6 +576,39 @@ namespace Henry_Danger_saves_Jasper_remake
                 Hideout.setImage("Room.png");
                 return;
             }
+
+            if(Lose6.isVisible())
+            {
+                ButonPictura.variableDisappear(Lose6, BackToGame);
+                Green.disappear();
+                NameOfObject.Visible = false;
+                BackToGame.setCoordinates(10000, 10000);
+                Tex.Visible = false;
+                TimeJerker.setImage("TimeJerker.png");
+                turned = 0;
+                ButonPictura.variableDisappear(But, TimeJerker);
+                Hideout.setImage("Room.png");
+                RightArrow3.appear(true);
+                ButonPictura.variableReactivate(Map);
+                return;
+            }
+
+            if (Lose7.isVisible())
+            {
+                ButonPictura.variableDisappear(Lose7, BackToGame);
+                six_thrown_wrong = 0;
+                turned = 0;
+                ButonPictura.variableReactivate(Flashlight, Watergun, Termite, Guitar, Map);
+                Six.setCoordinates(150, 10);
+                Lose6.setCoordinates(0, 0);
+                BackToGame.setCoordinates(300, 350);
+                RightArrow3.appear(true);
+                Hideout.setImage("Room.png");
+                ButonPictura.variableDisappear(But, TimeJerker);
+                Tex.Visible = false;
+                TimeJerker.setImage("TimeJerker.png");
+                TimeJerker.setCoordinates(470, 165);
+            }
         }
 
         private async void SlendermanClick(object sender, EventArgs e)
@@ -908,8 +951,164 @@ namespace Henry_Danger_saves_Jasper_remake
                 Hideout.setImage("Toddler8.png");
                 ButonPictura.variableReactivate(Flashlight, Watergun, Guitar, Six, Termite, Map);
                 RightArrow3.setCoordinates(675, 370);
+                Lose5.disappear();
                 return;
             }
+        }
+
+        private async void RightArrow3Click(object sender, EventArgs e)
+        {
+            if(time_jerker_defeated == 1)
+            {
+                return;
+            }
+            no_clicks_rightarrow3++;
+            if(no_clicks_rightarrow3 == 1)
+            {
+                Hideout.setImage("Room.png");
+                But.freeze();
+                return;
+            }
+            ButonPictura.variableFreeze(Map);
+            Green.disappear();
+            RightArrow3.disappear();
+            NameOfObject.Visible = false;
+            Hideout.setImage("TimeJerker1.png");
+            ButonPictura.variableAppear(true, But, TimeJerker);
+            But.setCoordinates(300, 225);
+            TimeJerker.setCoordinates(470, 165);
+            speak("Hello Henry! I know your identity now, don't I?", 365, 160, 100, 40);
+            await Task.Delay(3000);
+            turned = 1;
+            TimeJerker.setImage("TimeJerkerTurned.png");
+            if(six_thrown_wrong == 0 && six_thrown_right == 0)
+            {
+                speak("Now that you're here I'm leaving. I don't have TIME to talk to you.", 365, 160, 100, 60);
+                await Task.Delay(3000);
+                if (six_thrown_wrong == 0 && six_thrown_right == 0)
+                {
+                    BackToGame.setCoordinates(300, 350);
+                    ButonPictura.variableAppear(true, Lose6, BackToGame);
+                }             
+            }         
+            Green.disappear();
+            NameOfObject.Visible = false;         
+        }
+
+        private async void TimeJerkerClick(object sender, EventArgs e)
+        {
+            if(turned == 0)
+            {
+                if (Green.getP().Location.X + 7 == Six.getP().Location.X && Green.getP().Visible == true
+                    && Green.getP().Location.Y + 7 == Six.getP().Location.Y)
+                {
+                    six_thrown_wrong = 1;
+                    Green.disappear();
+                    NameOfObject.Visible = false;
+                    ButonPictura.variableFreeze(Flashlight, Watergun, Termite, Guitar);
+                    ButonPictura.variableMoveAway(Six, Lose6, TimeJerker, BackToGame);
+                    ButonPictura.variableDisappear(Lose6);
+                    Hideout.setImage("TimeJerker2.png");
+                    speak("You're planning to hit me with that? I want to see you try, honestly...", 365, 160, 100, 80);
+                    await Task.Delay(3000);
+                    speak("Well, now that you're here, I'm leaving. I don't have TIME to talk to you.", 365, 160, 100, 60);
+                    await Task.Delay(3000);
+                    BackToGame.setCoordinates(300, 350);
+                    ButonPictura.variableAppear(true, Lose7, BackToGame);
+                }
+                return;
+            }
+            if (turned == 1)
+            {
+                if (Green.getP().Location.X + 7 == Six.getP().Location.X && Green.getP().Visible == true
+                    && Green.getP().Location.Y + 7 == Six.getP().Location.Y)
+                {
+                    six_thrown_right = 1;
+                    Green.disappear();
+                    NameOfObject.Visible = false;
+                    ButonPictura.variableFreeze(Flashlight, Watergun, Termite, Guitar);
+                    ButonPictura.variableMoveAway(Six, TimeJerker, BackToGame, RightArrow3);
+                    ButonPictura.variableDispose(Lose6, Lose7, Six);                   
+                    Tex.Visible = false;
+                    Hideout.setImage("TimeJerker3.png");
+                    await Task.Delay(25);
+                    Hideout.setImage("TimeJerker4.png");
+                    await Task.Delay(25);
+                    Hideout.setImage("TimeJerker5.png");
+                    await Task.Delay(25);
+                    Hideout.setImage("TimeJerker6.png");
+                    await Task.Delay(25);
+                    Hideout.setImage("TimeJerker7.png");
+                    await Task.Delay(25);
+                    Hideout.setImage("TimeJerker8.png");
+                    await Task.Delay(25);
+                    Hideout.setImage("TimeJerker9.png");
+                    await Task.Delay(25);
+                    Hideout.setImage("TimeJerker10.png");
+                    await Task.Delay(25);
+                    Hideout.setImage("TimeJerker11.png");
+                    await Task.Delay(25);
+                    Hideout.setImage("TimeJerker12.png");
+                    await Task.Delay(25);
+                    Hideout.setImage("TimeJerker13.png");
+                    await Task.Delay(25);
+                    Hideout.setImage("TimeJerker14.png");
+                    await Task.Delay(25);
+                    Hideout.setImage("TimeJerker15.png");
+                    await Task.Delay(25);
+                    Hideout.setImage("TimeJerker16.png");
+                    await Task.Delay(25);
+                    Hideout.setImage("TimeJerker17.png");
+                    await Task.Delay(25);
+                    Hideout.setImage("TimeJerker18.png");
+                    await Task.Delay(25);
+                    Hideout.setImage("TimeJerker19.png");
+                    await Task.Delay(25);
+                    Hideout.setImage("TimeJerker20.png");
+                    await Task.Delay(25);
+                    Hideout.setImage("TimeJerker21.png");
+                    await Task.Delay(25);
+                    Hideout.setImage("TimeJerker22.png");
+                    await Task.Delay(25);
+                    Hideout.setImage("TimeJerker23.png");
+                    await Task.Delay(25);
+                    Hideout.setImage("TimeJerker24.png");
+                    await Task.Delay(25);
+                    Hideout.setImage("TimeJerker25.png");
+                    await Task.Delay(25);
+                    Hideout.setImage("TimeJerker26.png");
+                    await Task.Delay(25);
+                    Hideout.setImage("TimeJerker27.png");
+                    await Task.Delay(25);
+                    Hideout.setImage("TimeJerker28.png");
+                    await Task.Delay(25);
+                    Hideout.setImage("TimeJerker29.png");
+                    await Task.Delay(25);
+                    Hideout.setImage("TimeJerker30.png");
+                    await Task.Delay(25);
+                    Hideout.setImage("TimeJerker31.png");
+                    await Task.Delay(1000);
+                    Hideout.setImage("TimeJerker1.png");
+                    speak("I guess defeating him took just a little TIME...", 205, 160, 100, 40);
+                    await Task.Delay(3000);
+                    Tex.Visible = false;
+                    ButonPictura.variableReactivate(Flashlight, Watergun, Termite, Guitar, Map, But);
+                    time_jerker_defeated = 1;
+                }
+                return;
+            }
+        }
+
+        private void ButClick(object sender, EventArgs e)
+        {
+            if(But.isFrozen())
+            {
+                return;
+            }
+            But.freeze();
+            Hideout.setImage("Room.png");
+            RightArrow3.setCoordinates(675, 370);
+            RightArrow3.appear(true);
         }
     }
 }
