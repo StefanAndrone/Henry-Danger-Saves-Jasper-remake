@@ -28,17 +28,17 @@ namespace Henry_Danger_saves_Jasper_remake
         ButonPictura Map;
         ButonPictura Inventory;
         ButonPictura Slot1, Slot2, Slot3, Slot4, Slot5, Slot6;
-        ButonPictura Flashlight, Superglue, Witch, Guitar, Watergun;
+        ButonPictura Flashlight, Superglue, Witch, Guitar, Watergun, Ladder, Anvil;
         ButonPictura RightArrow, LeftArrow, X, Green, RightArrow3;
         ButonPictura BackToGame, Lose1, Slenderman, Paper, Mess, CloseMessage, Entrance;
         ButonPictura RightArrow2, Box, Termite, Six, JeffTheKiller, LightSwitch, Lose2, Lose3, Lose4, JeffInventory, Lose5, SlendermanInventory;
-        ButonPictura DoorButton, TimeJerker, But, Lose6, Lose7;
+        ButonPictura DoorButton, TimeJerker, But, Lose6, Lose7, Lose8, Box2;
         int no_clicks_park_map = 0, combined_glue_with_watergun = 0, x_was_glued = 0, subway_defeated = 0, pressed_light_switch = 0;
         int jeff_blinded_with_flashlight = 0, jeff_attacked = 0;
         int message_read = 0;
         int slendy = 0;
         int entrance = 0;
-        int no_clicks_rightarrow3 = 0, turned = 0, six_thrown_wrong = 0, six_thrown_right = 0, time_jerker_defeated = 0;
+        int no_clicks_rightarrow3 = 0, turned = 0, six_thrown_wrong = 0, six_thrown_right = 0, time_jerker_defeated = 0, box2taken = 0;
 
         public void speak(String text, int x, int y, int width, int height)
         {
@@ -95,6 +95,9 @@ namespace Henry_Danger_saves_Jasper_remake
             Box = new ButonPictura("Box.png", 10000, 10000, 50, 50, this, BoxClick);
             Six = new ButonPictura("6.png", 10000, 10000, 60, 60, this, SixClick);
             Termite = new ButonPictura("Termite.png", 10000, 10000, 60, 60, this, TermiteClick);
+            Ladder = new ButonPictura("Ladder.png", 10000, 10000, 60, 60, this, LadderClick);
+            Anvil = new ButonPictura("Anvil.png", 10000, 10000, 60, 60, this, AnvilClick);
+            Box2 = new ButonPictura("Box.png", 10000, 10000, 50, 50, this, Box2Click);
             JeffTheKiller = new ButonPictura("JeffTheKiller.png", 470, 165, 100, 270, this, JeffTheKillerClick);
             JeffInventory = new ButonPictura("JeffInventory.png", 10000, 10000, 60, 60, this, JeffInventoryClick);
             SlendermanInventory = new ButonPictura("SlendermanInventory.png", 10000, 10000, 60, 60, this, SlendermanInventoryClick);
@@ -105,11 +108,61 @@ namespace Henry_Danger_saves_Jasper_remake
             Lose5 = new ButonPictura("Lose5.png", 0, 0, 800, 480, this);
             Lose6 = new ButonPictura("Lose6.png", 0, 0, 800, 480, this);
             Lose7 = new ButonPictura("Lose7.png", 0, 0, 800, 480, this);
+            Lose8 = new ButonPictura("Lose8.png", 0, 0, 800, 480, this);
             DoorButton = new ButonPictura("Slot.png", 10000, 10000, 44, 168, this, DoorButtonClick);
             But = new ButonPictura("Button.png", 10000, 10000, 40, 40, this, ButClick);
             TimeJerker = new ButonPictura("TimeJerker.png", 10000, 10000, 100, 270, this, TimeJerkerClick);
             ButonPictura.variableDisappear(Mess, CloseMessage, Entrance, RightArrow2, JeffTheKiller, LightSwitch, Lose2, Lose3, Lose4, Lose5,
-                Lose6, Lose7);
+                Lose6, Lose7, Lose8);
+        }
+
+        private void Box2Click(object arg1, EventArgs args)
+        {
+            Anvil.setCoordinates(150, 10);
+            Ladder.setCoordinates(150, 80);
+            Box2.dispose();
+            RightArrow3.appear(true);
+            return;
+        }
+
+        private void AnvilClick(object arg1, EventArgs args)
+        {
+            if (Anvil.isFrozen())
+            {
+                return;
+            }
+            if (Green.getP().Location.X + 7 == Anvil.getP().Location.X && Green.getP().Visible == true
+                && Green.getP().Location.Y + 7 == Anvil.getP().Location.Y)
+            {
+                NameOfObject.Visible = false;
+                Green.disappear();
+                return;
+            }
+            Green.setCoordinates(Anvil.getP().Location.X - 7, Anvil.getP().Location.Y - 7);
+            NameOfObject.Text = "Anvil";
+            NameOfObject.Visible = true;
+            NameOfObject.BringToFront();
+            ButonPictura.variableAppear(true, Green, Anvil);
+        }
+
+        private void LadderClick(object arg1, EventArgs args)
+        {
+            if (Ladder.isFrozen())
+            {
+                return;
+            }
+            if (Green.getP().Location.X + 7 == Ladder.getP().Location.X && Green.getP().Visible == true
+                && Green.getP().Location.Y + 7 == Ladder.getP().Location.Y)
+            {
+                NameOfObject.Visible = false;
+                Green.disappear();
+                return;
+            }
+            Green.setCoordinates(Ladder.getP().Location.X - 7, Ladder.getP().Location.Y - 7);
+            NameOfObject.Text = "Ladder";
+            NameOfObject.Visible = true;
+            NameOfObject.BringToFront();
+            ButonPictura.variableAppear(true, Green, Ladder);
         }
 
         private async void ParkMapClick(object sender, EventArgs e)
@@ -159,7 +212,8 @@ namespace Henry_Danger_saves_Jasper_remake
             ButonPictura.variableDisappear(SubwayMap, HideoutMap, ParkMap, Subway, Hideout);
             ButonPictura.variableAppear(true, Park, Map);
             ButonPictura.variableAppear(true, Inventory, Slot1, Slot2, Slot3, Slot4, Slot5, Slot6);
-            ButonPictura.variableAppear(true, Flashlight, Superglue, Witch, Watergun, Guitar, Termite, Six, JeffInventory, SlendermanInventory);
+            ButonPictura.variableAppear(true, Flashlight, Superglue, Witch, Watergun, Guitar, Termite, Six, JeffInventory, SlendermanInventory,
+                Anvil, Ladder);
         }
 
         private void SubwayMapClick(object sender, EventArgs e)
@@ -168,7 +222,7 @@ namespace Henry_Danger_saves_Jasper_remake
             ButonPictura.variableAppear(true, Subway, Map);
             ButonPictura.variableAppear(true, Inventory, Slot1, Slot2, Slot3, Slot4, Slot5, Slot6);
             ButonPictura.variableAppear(true, Flashlight, Superglue, Witch, Watergun, Guitar, RightArrow, X,
-                Termite, Six, JeffInventory, SlendermanInventory);
+                Termite, Six, JeffInventory, SlendermanInventory, Anvil, Ladder);
             if(slendy == 1)
             {
                 Slenderman.appear(true);
@@ -182,7 +236,7 @@ namespace Henry_Danger_saves_Jasper_remake
             ButonPictura.variableAppear(true, Hideout, Map);
             ButonPictura.variableAppear(true, Inventory, Slot1, Slot2, Slot3, Slot4, Slot5, Slot6);
             ButonPictura.variableAppear(true, Flashlight, Superglue, Witch, Watergun, Guitar, Box,
-                Termite, Six, RightArrow2, JeffInventory, SlendermanInventory, DoorButton, RightArrow3);
+                Termite, Six, RightArrow2, JeffInventory, SlendermanInventory, DoorButton, RightArrow3, Box2, Anvil, Ladder);
             if(entrance == 1)
             {
                 Entrance.appear(true);
@@ -203,7 +257,7 @@ namespace Henry_Danger_saves_Jasper_remake
                 ButonPictura.variableDisappear(Inventory, Slot1, Slot2, Slot3, Slot4, Slot5, Slot6, Green);
                 ButonPictura.variableDisappear(Flashlight, Superglue, Witch, Watergun, Guitar, RightArrow, 
                 X, Slenderman, Paper, Entrance, Termite, Six, RightArrow2, JeffInventory, SlendermanInventory,
-                DoorButton, RightArrow3);
+                DoorButton, RightArrow3, Box2, Anvil, Ladder);
             }
         }
 
@@ -608,6 +662,16 @@ namespace Henry_Danger_saves_Jasper_remake
                 Tex.Visible = false;
                 TimeJerker.setImage("TimeJerker.png");
                 TimeJerker.setCoordinates(470, 165);
+                return;
+            }
+
+            if(Lose8.isVisible())
+            {
+                RightArrow3.appear(true);
+                ButonPictura.variableReactivate(Termite, Anvil, Watergun, Guitar, Flashlight, Ladder, Map);
+                Hideout.setImage("Room.png");
+                ButonPictura.variableDisappear(Lose8, BackToGame);
+                return;
             }
         }
 
@@ -958,8 +1022,28 @@ namespace Henry_Danger_saves_Jasper_remake
 
         private async void RightArrow3Click(object sender, EventArgs e)
         {
+            if(box2taken == 1)
+            {
+                RightArrow3.disappear();
+                Green.disappear();
+                NameOfObject.Visible = false;
+                ButonPictura.variableFreeze(Termite, Anvil, Watergun, Guitar, Flashlight, Ladder, Map);
+                Hideout.setImage("DrMinyak1.png");
+                await Task.Delay(1000);
+                Hideout.setImage("DrMinyak2.png");
+                await Task.Delay(1000);
+                Hideout.setImage("DrMinyak3.png");
+                await Task.Delay(1500);
+                ButonPictura.variableAppear(true, Lose8, BackToGame);
+                BackToGame.setCoordinates(300, 350);
+                return;
+            }
             if(time_jerker_defeated == 1)
             {
+                RightArrow3.disappear();
+                Box2.setCoordinates(Box.getCoordinates().X, Box.getCoordinates().Y);
+                But.dispose();
+                box2taken = 1;
                 return;
             }
             no_clicks_rightarrow3++;
@@ -1028,6 +1112,7 @@ namespace Henry_Danger_saves_Jasper_remake
                     NameOfObject.Visible = false;
                     ButonPictura.variableFreeze(Flashlight, Watergun, Termite, Guitar);
                     ButonPictura.variableMoveAway(Six, TimeJerker, BackToGame, RightArrow3);
+                    ButonPictura.variableDisappear(Lose6, Lose7);
                     ButonPictura.variableDispose(Lose6, Lose7, Six);                   
                     Tex.Visible = false;
                     Hideout.setImage("TimeJerker3.png");
@@ -1094,6 +1179,7 @@ namespace Henry_Danger_saves_Jasper_remake
                     Tex.Visible = false;
                     ButonPictura.variableReactivate(Flashlight, Watergun, Termite, Guitar, Map, But);
                     time_jerker_defeated = 1;
+                    BackToGame.setCoordinates(300, 350);
                 }
                 return;
             }
