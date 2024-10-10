@@ -92,6 +92,11 @@ namespace Henry_Danger_saves_Jasper_remake
 
         public void setImage(string filename)
         {
+            if(filename == null)
+            {
+                p.Image = null;
+                return;
+            }
             filename = "../../img/" + filename;
             p.Image = Image.FromFile(filename);
         }

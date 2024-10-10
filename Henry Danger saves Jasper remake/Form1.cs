@@ -32,13 +32,15 @@ namespace Henry_Danger_saves_Jasper_remake
         ButonPictura RightArrow, LeftArrow, X, Green, RightArrow3;
         ButonPictura BackToGame, Lose1, Slenderman, Paper, Mess, CloseMessage, Entrance;
         ButonPictura RightArrow2, Box, Termite, Six, JeffTheKiller, LightSwitch, Lose2, Lose3, Lose4, JeffInventory, Lose5, SlendermanInventory;
-        ButonPictura DoorButton, TimeJerker, But, Lose6, Lose7, Lose8, Box2, DoorButton2, Lose9;
+        ButonPictura DoorButton, TimeJerker, But, Lose6, Lose7, Lose8, Box2, DoorButton2, Lose9, Transparent;
         int no_clicks_park_map = 0, combined_glue_with_watergun = 0, x_was_glued = 0, subway_defeated = 0, pressed_light_switch = 0;
         int jeff_blinded_with_flashlight = 0, jeff_attacked = 0;
         int message_read = 0;
-        int slendy = 0;
+        int slendy = 0;      
+
         int entrance = 0;
         int no_clicks_rightarrow3 = 0, turned = 0, six_thrown_wrong = 0, six_thrown_right = 0, time_jerker_defeated = 0, box2taken = 0;
+        int minyak_state = 0;
 
         public void speak(String text, int x, int y, int width, int height)
         {
@@ -116,6 +118,19 @@ namespace Henry_Danger_saves_Jasper_remake
             TimeJerker = new ButonPictura("TimeJerker.png", 10000, 10000, 100, 270, this, TimeJerkerClick);
             ButonPictura.variableDisappear(Mess, CloseMessage, Entrance, RightArrow2, JeffTheKiller, LightSwitch, Lose2, Lose3, Lose4, Lose5,
                 Lose6, Lose7, Lose8, Lose9);
+            Transparent = new ButonPictura("Transparent.png", 10000, 10000, 500, 500, this, TransparentClick);
+        }
+
+        private void TransparentClick(object arg1, EventArgs args)
+        {
+            if(minyak_state == 0)
+            {
+                Ladder.dispose();
+                Green.disappear();
+                NameOfObject.Visible = false;
+                Hideout.setImage("DrMinyak5.png");
+                minyak_state = 1;
+            }
         }
 
         private async void DoorButton2Click(object arg1, EventArgs args)
@@ -126,13 +141,25 @@ namespace Henry_Danger_saves_Jasper_remake
             Hideout.setImage("DrMinyak4.png");
             speak("WHAT IS THIS NOISE??? WHO DARES TO DO THIS?!", 435, 160, 100, 60);
             await Task.Delay(3000);
-            Hideout.setImage("DrMinyak1.png");
-            speak("Thinkin' you're very clever Henry?", 465, 160, 100, 30);
+            if(minyak_state == 0)
+                Hideout.setImage("DrMinyak1.png");
+            else
+                Hideout.setImage("DrMinyak6.png");
+            if(minyak_state == 0)
+                speak("Thinkin' you're very clever Henry?", 465, 160, 100, 30);
+            else
+                speak("Thinkin' you're very clever Henry?", 580, 160, 100, 30);
             await Task.Delay(3000);
             Tex.Visible = false;
-            Hideout.setImage("DrMinyak2.png");
+            if (minyak_state == 0)
+                Hideout.setImage("DrMinyak2.png");
+            else
+                Hideout.setImage("DrMinyak7.png");
             await Task.Delay(1000);
-            Hideout.setImage("DrMinyak3.png");
+            if (minyak_state == 0)
+                Hideout.setImage("DrMinyak3.png");
+            else
+                Hideout.setImage("DrMinyak8.png");
             await Task.Delay(1500);
             ButonPictura.variableAppear(true, Lose9, BackToGame);
             return;
@@ -145,6 +172,11 @@ namespace Henry_Danger_saves_Jasper_remake
             Box2.dispose();
             RightArrow3.appear(true);
             DoorButton2.setCoordinates(729, 200);
+            Transparent.setCoordinates(600, 0);
+            ButonPictura.variableAppear(true, Transparent, Map, RightArrow3);
+            Transparent.setImage(null);
+            Transparent.getP().BackColor = Color.Transparent;
+            Transparent.getP().Parent = Hideout.getP();
             return;
         }
 
@@ -692,7 +724,10 @@ namespace Henry_Danger_saves_Jasper_remake
             {
                 RightArrow3.appear(true);
                 ButonPictura.variableReactivate(Termite, Anvil, Watergun, Guitar, Flashlight, Ladder, Map);
-                Hideout.setImage("Room.png");
+                if (minyak_state == 0)
+                    Hideout.setImage("Room.png");
+                else
+                    Hideout.setImage("DrMinyak5.png");
                 ButonPictura.variableDisappear(Lose8, BackToGame);
                 return;
             }
@@ -701,7 +736,10 @@ namespace Henry_Danger_saves_Jasper_remake
             {
                 ButonPictura.variableReactivate(Guitar, Flashlight, Ladder, Anvil, Termite, Watergun, Map);
                 ButonPictura.variableAppear(true, DoorButton2, RightArrow3);
-                Hideout.setImage("Room.png");               
+                if (minyak_state == 0)
+                    Hideout.setImage("Room.png");
+                else
+                    Hideout.setImage("DrMinyak5.png");              
                 ButonPictura.variableDisappear(Lose9, BackToGame);
             }
         }
