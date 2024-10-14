@@ -32,7 +32,7 @@ namespace Henry_Danger_saves_Jasper_remake
         ButonPictura RightArrow, LeftArrow, X, Green, RightArrow3;
         ButonPictura BackToGame, Lose1, Slenderman, Paper, Mess, CloseMessage, Entrance;
         ButonPictura RightArrow2, Box, Termite, Six, JeffTheKiller, LightSwitch, Lose2, Lose3, Lose4, JeffInventory, Lose5, SlendermanInventory;
-        ButonPictura DoorButton, TimeJerker, But, Lose6, Lose7, Lose8, Box2, DoorButton2, Lose9, Transparent;
+        ButonPictura DoorButton, TimeJerker, But, Lose6, Lose7, Lose8, Box2, DoorButton2, Lose9, Transparent, DreamBeam;
         int no_clicks_park_map = 0, combined_glue_with_watergun = 0, x_was_glued = 0, subway_defeated = 0, pressed_light_switch = 0;
         int jeff_blinded_with_flashlight = 0, jeff_attacked = 0;
         int message_read = 0;
@@ -40,7 +40,7 @@ namespace Henry_Danger_saves_Jasper_remake
 
         int entrance = 0;
         int no_clicks_rightarrow3 = 0, turned = 0, six_thrown_wrong = 0, six_thrown_right = 0, time_jerker_defeated = 0, box2taken = 0;
-        int minyak_state = 0;
+        int minyak_state = 0, allowed = 0;
 
         public void speak(String text, int x, int y, int width, int height)
         {
@@ -100,6 +100,7 @@ namespace Henry_Danger_saves_Jasper_remake
             Ladder = new ButonPictura("Ladder.png", 10000, 10000, 60, 60, this, LadderClick);
             Anvil = new ButonPictura("Anvil.png", 10000, 10000, 60, 60, this, AnvilClick);
             Box2 = new ButonPictura("Box.png", 10000, 10000, 50, 50, this, Box2Click);
+            DreamBeam = new ButonPictura("DreamBeam.png", 10000, 10000, 60, 60, this, DreamBeamClick);
             JeffTheKiller = new ButonPictura("JeffTheKiller.png", 470, 165, 100, 270, this, JeffTheKillerClick);
             JeffInventory = new ButonPictura("JeffInventory.png", 10000, 10000, 60, 60, this, JeffInventoryClick);
             SlendermanInventory = new ButonPictura("SlendermanInventory.png", 10000, 10000, 60, 60, this, SlendermanInventoryClick);
@@ -121,48 +122,147 @@ namespace Henry_Danger_saves_Jasper_remake
             Transparent = new ButonPictura("Transparent.png", 10000, 10000, 500, 500, this, TransparentClick);
         }
 
-        private void TransparentClick(object arg1, EventArgs args)
+        private void DreamBeamClick(object arg1, EventArgs args)
+        {
+            if (DreamBeam.isFrozen())
+            {
+                return;
+            }
+            if (Green.getP().Location.X + 7 == DreamBeam.getP().Location.X && Green.getP().Visible == true
+                && Green.getP().Location.Y + 7 == DreamBeam.getP().Location.Y)
+            {
+                NameOfObject.Visible = false;
+                Green.disappear();
+                return;
+            }
+            Green.setCoordinates(DreamBeam.getP().Location.X - 7, DreamBeam.getP().Location.Y - 7);
+            NameOfObject.Text = "Dream Beam";
+            NameOfObject.Visible = true;
+            NameOfObject.BringToFront();
+            ButonPictura.variableAppear(true, Green, DreamBeam);
+        }
+
+        private async void TransparentClick(object arg1, EventArgs args)
         {
             if(minyak_state == 0)
             {
-                Ladder.dispose();
-                Green.disappear();
-                NameOfObject.Visible = false;
-                Hideout.setImage("DrMinyak5.png");
-                minyak_state = 1;
+                if (Green.getP().Location.X + 7 == Ladder.getP().Location.X && Green.getP().Visible == true
+                    && Green.getP().Location.Y + 7 == Ladder.getP().Location.Y)
+                {
+                    Ladder.dispose();
+                    Green.disappear();
+                    NameOfObject.Visible = false;
+                    Hideout.setImage("DrMinyak5.png");
+                    minyak_state = 1;
+                    return;
+                }              
+            }
+            if (minyak_state == 1)
+            {
+                if (Green.getP().Location.X + 7 == Anvil.getP().Location.X && Green.getP().Visible == true
+                    && Green.getP().Location.Y + 7 == Anvil.getP().Location.Y)
+                {
+                    Anvil.dispose();
+                    Green.disappear();
+                    NameOfObject.Visible = false;
+                    Hideout.setImage("DrMinyak9.png");
+                    minyak_state = 2;
+                    Transparent.setCoordinates(Transparent.getCoordinates().X - 200, Transparent.getCoordinates().Y);
+                    Transparent.increaseWidth(200);
+                    return;
+                }
+            }
+            if (minyak_state == 2)
+            {
+                if (Green.getP().Location.X + 7 == Termite.getP().Location.X && Green.getP().Visible == true
+                    && Green.getP().Location.Y + 7 == Termite.getP().Location.Y && allowed == 1)
+                {
+                    ButonPictura.variableFreeze(Guitar, Flashlight, Watergun);
+                    Green.disappear();
+                    NameOfObject.Visible = false;
+                    minyak_state = 3;
+                    RightArrow3.dispose();
+                    ButonPictura.variableDispose(Lose9);
+                    Hideout.setImage("DrMinyak13.png");
+                    Termite.dispose();
+                    DoorButton2.dispose();
+                    ButonPictura.variableMoveAway(BackToGame);
+                    Tex.Visible = false;
+                    await Task.Delay(1000);
+                    Hideout.setImage("DrMinyak14.png");
+                    speak("Well, well, well... A ladder specially prepared for Super Termite...", 300, 100, 100, 80);
+                    await Task.Delay(3000);
+                    Tex.Visible = false;
+                    Hideout.setImage("DrMinyak15.png");
+                    await Task.Delay(1000);
+                    Hideout.setImage("DrMinyak16.png");
+                    await Task.Delay(1500);
+                    Hideout.setImage("Room.png");
+                    speak("This reminds me of Obama Guantanamo Escape, he he he... Now I have Minyak's Dream Beam in my inventory.", 265, 160, 100, 80);
+                    await Task.Delay(3000);
+                    Tex.Visible = false;
+                    DreamBeam.setCoordinates(80, 80);
+                    DreamBeam.appear(true);
+                    ButonPictura.variableReactivate(Guitar, Flashlight, Watergun, Map);
+                    return;
+                }
             }
         }
 
         private async void DoorButton2Click(object arg1, EventArgs args)
         {
-            ButonPictura.variableFreeze(Guitar, Flashlight, Ladder, Anvil, Termite, Watergun, Map);
-            ButonPictura.variableDisappear(DoorButton2, Green, RightArrow3, Lose8);
-            NameOfObject.Visible = false;
-            Hideout.setImage("DrMinyak4.png");
-            speak("WHAT IS THIS NOISE??? WHO DARES TO DO THIS?!", 435, 160, 100, 60);
-            await Task.Delay(3000);
-            if(minyak_state == 0)
-                Hideout.setImage("DrMinyak1.png");
-            else
-                Hideout.setImage("DrMinyak6.png");
-            if(minyak_state == 0)
-                speak("Thinkin' you're very clever Henry?", 465, 160, 100, 30);
-            else
-                speak("Thinkin' you're very clever Henry?", 580, 160, 100, 30);
-            await Task.Delay(3000);
-            Tex.Visible = false;
-            if (minyak_state == 0)
-                Hideout.setImage("DrMinyak2.png");
-            else
-                Hideout.setImage("DrMinyak7.png");
-            await Task.Delay(1000);
-            if (minyak_state == 0)
-                Hideout.setImage("DrMinyak3.png");
-            else
-                Hideout.setImage("DrMinyak8.png");
-            await Task.Delay(1500);
-            ButonPictura.variableAppear(true, Lose9, BackToGame);
-            return;
+            if (Green.getP().Location.X + 7 == Guitar.getP().Location.X && Green.getP().Visible == true
+                && Green.getP().Location.Y + 7 == Guitar.getP().Location.Y)
+            {
+                ButonPictura.variableFreeze(Guitar, Flashlight, Ladder, Anvil, Termite, Watergun, Map);
+                ButonPictura.variableDisappear(DoorButton2, Green, RightArrow3, Lose8);
+                NameOfObject.Visible = false;
+                Hideout.setImage("DrMinyak4.png");
+                speak("WHAT IS THIS NOISE??? WHO DARES TO DO THIS?!", 435, 160, 100, 60);
+                await Task.Delay(3000);
+                if (minyak_state == 0)
+                    Hideout.setImage("DrMinyak1.png");
+                else if (minyak_state == 1)
+                    Hideout.setImage("DrMinyak6.png");
+                else
+                    Hideout.setImage("DrMinyak10.png");
+                if (minyak_state == 0)
+                    speak("Thinkin' you're very clever Henry?", 465, 160, 100, 30);
+                else
+                    speak("Thinkin' you're very clever Henry?", 580, 160, 100, 30);
+                if(minyak_state == 2)
+                {
+                    ButonPictura.variableReactivate(Guitar, Flashlight, Watergun, Termite);
+                    allowed = 1;
+                }
+                await Task.Delay(3000);
+                allowed = 0;
+                if (minyak_state != 3)
+                    Tex.Visible = false;
+                if (minyak_state >= 2)
+                {
+                    ButonPictura.variableFreeze(Guitar, Flashlight, Watergun, Termite);
+                    Green.disappear();
+                    NameOfObject.Visible = false;
+                }
+                if (minyak_state == 0)
+                    Hideout.setImage("DrMinyak2.png");
+                else if (minyak_state == 1)
+                    Hideout.setImage("DrMinyak7.png");
+                else if(minyak_state == 2)
+                    Hideout.setImage("DrMinyak11.png");
+                await Task.Delay(1000);
+                if (minyak_state == 0)
+                    Hideout.setImage("DrMinyak3.png");
+                else if (minyak_state == 1)
+                    Hideout.setImage("DrMinyak8.png");
+                else if(minyak_state == 2)
+                    Hideout.setImage("DrMinyak12.png");
+                await Task.Delay(1500);
+                ButonPictura.variableAppear(true, Lose9, BackToGame);
+                return;
+            }
+            
         }
 
         private void Box2Click(object arg1, EventArgs args)
@@ -268,7 +368,7 @@ namespace Henry_Danger_saves_Jasper_remake
             ButonPictura.variableAppear(true, Park, Map);
             ButonPictura.variableAppear(true, Inventory, Slot1, Slot2, Slot3, Slot4, Slot5, Slot6);
             ButonPictura.variableAppear(true, Flashlight, Superglue, Witch, Watergun, Guitar, Termite, Six, JeffInventory, SlendermanInventory,
-                Anvil, Ladder);
+                Anvil, Ladder, DreamBeam);
         }
 
         private void SubwayMapClick(object sender, EventArgs e)
@@ -277,7 +377,7 @@ namespace Henry_Danger_saves_Jasper_remake
             ButonPictura.variableAppear(true, Subway, Map);
             ButonPictura.variableAppear(true, Inventory, Slot1, Slot2, Slot3, Slot4, Slot5, Slot6);
             ButonPictura.variableAppear(true, Flashlight, Superglue, Witch, Watergun, Guitar, RightArrow, X,
-                Termite, Six, JeffInventory, SlendermanInventory, Anvil, Ladder);
+                Termite, Six, JeffInventory, SlendermanInventory, Anvil, Ladder, DreamBeam);
             if(slendy == 1)
             {
                 Slenderman.appear(true);
@@ -291,7 +391,7 @@ namespace Henry_Danger_saves_Jasper_remake
             ButonPictura.variableAppear(true, Hideout, Map);
             ButonPictura.variableAppear(true, Inventory, Slot1, Slot2, Slot3, Slot4, Slot5, Slot6);
             ButonPictura.variableAppear(true, Flashlight, Superglue, Witch, Watergun, Guitar, Box,
-                Termite, Six, RightArrow2, JeffInventory, SlendermanInventory, DoorButton, RightArrow3, Box2, Anvil, Ladder, DoorButton2);
+                Termite, Six, RightArrow2, JeffInventory, SlendermanInventory, DoorButton, RightArrow3, Box2, Anvil, Ladder, DoorButton2, DreamBeam);
             if(entrance == 1)
             {
                 Entrance.appear(true);
@@ -312,7 +412,7 @@ namespace Henry_Danger_saves_Jasper_remake
                 ButonPictura.variableDisappear(Inventory, Slot1, Slot2, Slot3, Slot4, Slot5, Slot6, Green);
                 ButonPictura.variableDisappear(Flashlight, Superglue, Witch, Watergun, Guitar, RightArrow, 
                 X, Slenderman, Paper, Entrance, Termite, Six, RightArrow2, JeffInventory, SlendermanInventory,
-                DoorButton, RightArrow3, Box2, Anvil, Ladder, DoorButton2);
+                DoorButton, RightArrow3, Box2, Anvil, Ladder, DoorButton2, DreamBeam);
             }
         }
 
@@ -726,8 +826,10 @@ namespace Henry_Danger_saves_Jasper_remake
                 ButonPictura.variableReactivate(Termite, Anvil, Watergun, Guitar, Flashlight, Ladder, Map);
                 if (minyak_state == 0)
                     Hideout.setImage("Room.png");
-                else
+                else if (minyak_state == 1)
                     Hideout.setImage("DrMinyak5.png");
+                else
+                    Hideout.setImage("DrMinyak9.png");
                 ButonPictura.variableDisappear(Lose8, BackToGame);
                 return;
             }
@@ -738,8 +840,10 @@ namespace Henry_Danger_saves_Jasper_remake
                 ButonPictura.variableAppear(true, DoorButton2, RightArrow3);
                 if (minyak_state == 0)
                     Hideout.setImage("Room.png");
+                else if(minyak_state == 1)
+                    Hideout.setImage("DrMinyak5.png");  
                 else
-                    Hideout.setImage("DrMinyak5.png");              
+                    Hideout.setImage("DrMinyak9.png");
                 ButonPictura.variableDisappear(Lose9, BackToGame);
             }
         }
