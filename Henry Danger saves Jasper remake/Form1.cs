@@ -32,11 +32,17 @@ namespace Henry_Danger_saves_Jasper_remake
         ButonPictura RightArrow, LeftArrow, X, Green, RightArrow3;
         ButonPictura BackToGame, Lose1, Slenderman, Paper, Mess, CloseMessage, Entrance;
         ButonPictura RightArrow2, Box, Termite, Six, JeffTheKiller, LightSwitch, Lose2, Lose3, Lose4, JeffInventory, Lose5, SlendermanInventory;
-        ButonPictura DoorButton, TimeJerker, But, Lose6, Lose7, Lose8, Box2, DoorButton2, Lose9, Transparent, DreamBeam, But2, RightArrow4, Lose10;
+        ButonPictura DoorButton, TimeJerker, But, Lose6, Lose7, Lose8, Box2, DoorButton2, Lose9, Transparent, DreamBeam, But2, RightArrow4, Lose10, Timer;
+        ButonPictura Lose11, Lose12;
         int no_clicks_park_map = 0, combined_glue_with_watergun = 0, x_was_glued = 0, subway_defeated = 0, pressed_light_switch = 0;
         int jeff_blinded_with_flashlight = 0, jeff_attacked = 0;
         int message_read = 0;
-        int slendy = 0;      
+        int slendy = 0;
+
+        private void textBox1_TextChanged_1(object sender, EventArgs e)
+        {
+
+        }
 
         int entrance = 0;
         int no_clicks_rightarrow3 = 0, turned = 0, six_thrown_wrong = 0, six_thrown_right = 0, time_jerker_defeated = 0, box2taken = 0;
@@ -115,14 +121,17 @@ namespace Henry_Danger_saves_Jasper_remake
             Lose8 = new ButonPictura("Lose8.png", 0, 0, 800, 480, this);
             Lose9 = new ButonPictura("Lose9.png", 0, 0, 800, 480, this);
             Lose10 = new ButonPictura("Lose10.png", 0, 0, 800, 480, this);
+            Lose11 = new ButonPictura("Lose11.png", 0, 0, 800, 480, this);
             DoorButton = new ButonPictura("Slot.png", 10000, 10000, 44, 168, this, DoorButtonClick);
             DoorButton2 = new ButonPictura("Slot.png", 10000, 10000, 44, 168, this, DoorButton2Click);
             But = new ButonPictura("Button.png", 10000, 10000, 40, 40, this, ButClick);
             But2 = new ButonPictura("Button.png", 10000, 10000, 40, 40, this, But2Click);
             TimeJerker = new ButonPictura("TimeJerker.png", 10000, 10000, 100, 270, this, TimeJerkerClick);
             ButonPictura.variableDisappear(Mess, CloseMessage, Entrance, RightArrow2, JeffTheKiller, LightSwitch, Lose2, Lose3, Lose4, Lose5,
-                Lose6, Lose7, Lose8, Lose9, Lose10);
+                Lose6, Lose7, Lose8, Lose9, Lose10, Lose11);
             Transparent = new ButonPictura("Transparent.png", 10000, 10000, 500, 500, this, TransparentClick);
+            Timer = new ButonPictura("Time_00_03.png", 354, 0, 92, 30, this);
+            Timer.disappear();
         }
 
         private async void RightArrow4Click(object arg1, EventArgs args)
@@ -142,6 +151,9 @@ namespace Henry_Danger_saves_Jasper_remake
                 Hideout.setImage("RoomLaser.png");
                 But2.setCoordinates(But.getCoordinates().X, But.getCoordinates().Y);
                 But2.appear(true);
+                Transparent.setCoordinates(300, 30);
+                Transparent.setWidth(100);
+                Transparent.setHeight(100);
                 return;
             }
             But.disappear();
@@ -166,8 +178,19 @@ namespace Henry_Danger_saves_Jasper_remake
             return;
         }
 
-        private void But2Click(object arg1, EventArgs args)
+        private async void But2Click(object arg1, EventArgs args)
         {
+            if(But2.isFrozen())
+            {
+                return;
+            }
+            Hideout.setImage("RoomLaser2.png");
+            ButonPictura.variableFreeze(Guitar, Watergun, Flashlight, DreamBeam, Map, But2, RightArrow4);
+            NameOfObject.Visible = false;
+            Green.disappear();
+            await Task.Delay(1000);
+            ButonPictura.variableReactivate(Guitar, Watergun, Flashlight, DreamBeam, Map, But2, RightArrow4);
+            Hideout.setImage("RoomLaser.png");
             return;
         }
 
@@ -193,6 +216,10 @@ namespace Henry_Danger_saves_Jasper_remake
 
         private async void TransparentClick(object arg1, EventArgs args)
         {
+            if(Transparent.isFrozen())
+            {
+                return;
+            }
             if(minyak_state == 0)
             {
                 if (Green.getP().Location.X + 7 == Ladder.getP().Location.X && Green.getP().Visible == true
@@ -204,7 +231,8 @@ namespace Henry_Danger_saves_Jasper_remake
                     Hideout.setImage("DrMinyak5.png");
                     minyak_state = 1;
                     return;
-                }              
+                }
+                return;
             }
             if (minyak_state == 1)
             {
@@ -220,6 +248,7 @@ namespace Henry_Danger_saves_Jasper_remake
                     Transparent.increaseWidth(200);
                     return;
                 }
+                return;
             }
             if (minyak_state == 2)
             {
@@ -255,9 +284,47 @@ namespace Henry_Danger_saves_Jasper_remake
                     ButonPictura.variableReactivate(Guitar, Flashlight, Watergun, Map);
                     RightArrow4.setCoordinates(675, 370);
                     RightArrow4.appear(true);
+                    Lose9.disappear();
+                    Lose8.disappear();
                     return;
                 }
+                return;
             }
+
+            if (Green.getP().Location.X + 7 == Guitar.getP().Location.X && Green.getP().Visible == true
+                && Green.getP().Location.Y + 7 == Guitar.getP().Location.Y)
+            {
+                ButonPictura.variableFreeze(Guitar, Watergun, Flashlight, DreamBeam, Map, But2, RightArrow4, Transparent);
+                NameOfObject.Visible = false;
+                Green.disappear();
+                But2.disappear();
+                RightArrow4.disappear();
+                Hideout.setImage("RoomLaser3.png");
+                await Task.Delay(1000);
+                Hideout.setImage("RoomLaser4.png");
+                Timer.appear(true);
+                Timer.setImage("Time_00_03.png");
+                await Task.Delay(1000);
+                Timer.setImage("Time_00_02.png");
+                await Task.Delay(1000);
+                Timer.setImage("Time_00_01.png");
+                await Task.Delay(1000);
+                Timer.disappear();
+                Hideout.setImage("Drex.png");
+                speak("My smartwatch tells me someone moved the laser in the other room, let's give them a lesson...", 455, 160, 100, 80);
+                await Task.Delay(3000);
+                Hideout.setImage("RoomLaser4.png");
+                speak("I feel a funny smell...", 245, 160, 100, 20);
+                await Task.Delay(2000);
+                Tex.Visible = false;
+                Hideout.setImage("RoomLaser5.png");
+                await Task.Delay(1500);
+                BackToGame.setCoordinates(300, 350);
+                ButonPictura.variableAppear(true, Lose11, BackToGame);
+                Lose10.disappear();
+                return;
+            }
+            
         }
 
         private async void DoorButton2Click(object arg1, EventArgs args)
@@ -908,6 +975,16 @@ namespace Henry_Danger_saves_Jasper_remake
                 Hideout.setImage("RoomLaser.png");
                 ButonPictura.variableDisappear(Lose10, BackToGame);
                 return;
+            }
+
+            if(Lose11.isVisible())
+            {
+                ButonPictura.variableReactivate(Guitar, Watergun, Flashlight, DreamBeam, Map, But2, RightArrow4, Transparent);
+                But2.appear(true);
+                RightArrow4.appear(true);
+                Hideout.setImage("RoomLaser.png");                                      
+                ButonPictura.variableDisappear(Lose11, BackToGame);
+                return;                
             }
         }
 

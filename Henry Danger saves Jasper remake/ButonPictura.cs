@@ -121,6 +121,16 @@ namespace Henry_Danger_saves_Jasper_remake
             p.Height += x;
         }
 
+        public void setWidth(int x)
+        {
+            p.Width = x;
+        }
+
+        public void setHeight(int x)
+        {
+            p.Height = x;
+        }
+
         public void freeze()
         {
             frozen = true;
