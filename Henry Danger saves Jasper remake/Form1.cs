@@ -297,11 +297,12 @@ namespace Henry_Danger_saves_Jasper_remake
                 ButonPictura.variableFreeze(Guitar, Watergun, Flashlight, DreamBeam, Map, But2, RightArrow4, Transparent);
                 NameOfObject.Visible = false;
                 Green.disappear();
-                But2.disappear();
                 RightArrow4.disappear();
+                But2.disappear();
                 Hideout.setImage("RoomLaser3.png");
                 await Task.Delay(1000);
                 Hideout.setImage("RoomLaser4.png");
+                But2.appear(true);
                 Timer.appear(true);
                 Timer.setImage("Time_00_03.png");
                 await Task.Delay(1000);
@@ -310,10 +311,12 @@ namespace Henry_Danger_saves_Jasper_remake
                 Timer.setImage("Time_00_01.png");
                 await Task.Delay(1000);
                 Timer.disappear();
+                But2.disappear();
                 Hideout.setImage("Drex.png");
                 speak("My smartwatch tells me someone moved the laser in the other room, let's give them a lesson...", 455, 160, 100, 80);
                 await Task.Delay(3000);
                 Hideout.setImage("RoomLaser4.png");
+                But2.appear(true);
                 speak("I feel a funny smell...", 245, 160, 100, 20);
                 await Task.Delay(2000);
                 Tex.Visible = false;
@@ -322,6 +325,7 @@ namespace Henry_Danger_saves_Jasper_remake
                 BackToGame.setCoordinates(300, 350);
                 ButonPictura.variableAppear(true, Lose11, BackToGame);
                 Lose10.disappear();
+                But2.disappear();
                 return;
             }
             
