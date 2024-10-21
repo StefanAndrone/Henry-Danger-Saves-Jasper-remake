@@ -38,7 +38,7 @@ namespace Henry_Danger_saves_Jasper_remake
         int jeff_blinded_with_flashlight = 0, jeff_attacked = 0;
         int message_read = 0;
         int slendy = 0;
-
+        int drex_attacked = 0;
         private void textBox1_TextChanged_1(object sender, EventArgs e)
         {
 
@@ -122,13 +122,14 @@ namespace Henry_Danger_saves_Jasper_remake
             Lose9 = new ButonPictura("Lose9.png", 0, 0, 800, 480, this);
             Lose10 = new ButonPictura("Lose10.png", 0, 0, 800, 480, this);
             Lose11 = new ButonPictura("Lose11.png", 0, 0, 800, 480, this);
+            Lose12 = new ButonPictura("Lose12.png", 0, 0, 800, 480, this);
             DoorButton = new ButonPictura("Slot.png", 10000, 10000, 44, 168, this, DoorButtonClick);
             DoorButton2 = new ButonPictura("Slot.png", 10000, 10000, 44, 168, this, DoorButton2Click);
             But = new ButonPictura("Button.png", 10000, 10000, 40, 40, this, ButClick);
             But2 = new ButonPictura("Button.png", 10000, 10000, 40, 40, this, But2Click);
             TimeJerker = new ButonPictura("TimeJerker.png", 10000, 10000, 100, 270, this, TimeJerkerClick);
             ButonPictura.variableDisappear(Mess, CloseMessage, Entrance, RightArrow2, JeffTheKiller, LightSwitch, Lose2, Lose3, Lose4, Lose5,
-                Lose6, Lose7, Lose8, Lose9, Lose10, Lose11);
+                Lose6, Lose7, Lose8, Lose9, Lose10, Lose11, Lose12);
             Transparent = new ButonPictura("Transparent.png", 10000, 10000, 500, 500, this, TransparentClick);
             Timer = new ButonPictura("Time_00_03.png", 354, 0, 92, 30, this);
             Timer.disappear();
@@ -175,22 +176,6 @@ namespace Henry_Danger_saves_Jasper_remake
             Tex.Visible = false;
             BackToGame.setCoordinates(300, 350);
             ButonPictura.variableAppear(true, Lose10, BackToGame);
-            return;
-        }
-
-        private async void But2Click(object arg1, EventArgs args)
-        {
-            if(But2.isFrozen())
-            {
-                return;
-            }
-            Hideout.setImage("RoomLaser2.png");
-            ButonPictura.variableFreeze(Guitar, Watergun, Flashlight, DreamBeam, Map, But2, RightArrow4);
-            NameOfObject.Visible = false;
-            Green.disappear();
-            await Task.Delay(1000);
-            ButonPictura.variableReactivate(Guitar, Watergun, Flashlight, DreamBeam, Map, But2, RightArrow4);
-            Hideout.setImage("RoomLaser.png");
             return;
         }
 
@@ -294,7 +279,7 @@ namespace Henry_Danger_saves_Jasper_remake
             if (Green.getP().Location.X + 7 == Guitar.getP().Location.X && Green.getP().Visible == true
                 && Green.getP().Location.Y + 7 == Guitar.getP().Location.Y)
             {
-                ButonPictura.variableFreeze(Guitar, Watergun, Flashlight, DreamBeam, Map, But2, RightArrow4, Transparent);
+                ButonPictura.variableFreeze(Guitar, Watergun, Flashlight, DreamBeam, Map, RightArrow4, Transparent);
                 NameOfObject.Visible = false;
                 Green.disappear();
                 RightArrow4.disappear();
@@ -311,7 +296,10 @@ namespace Henry_Danger_saves_Jasper_remake
                 Timer.setImage("Time_00_01.png");
                 await Task.Delay(1000);
                 Timer.disappear();
+                But2.freeze();
                 But2.disappear();
+                if (drex_attacked == 1)
+                    return;
                 Hideout.setImage("Drex.png");
                 speak("My smartwatch tells me someone moved the laser in the other room, let's give them a lesson...", 455, 160, 100, 80);
                 await Task.Delay(3000);
@@ -329,6 +317,74 @@ namespace Henry_Danger_saves_Jasper_remake
                 return;
             }
             
+        }
+
+        private async void But2Click(object arg1, EventArgs args)
+        {
+            if (But2.isFrozen())
+            {
+                return;
+            }
+            if (Timer.isVisible())
+            {
+                Timer.disappear();
+                drex_attacked = 1;
+                Hideout.setImage("Drex.png");
+                speak("My smartwatch tells me someone moved the laser in the other room, let's give them a lesson...", 455, 160, 100, 80);
+                But2.disappear();
+                await Task.Delay(3000);
+                Tex.Visible = false;
+                Hideout.setImage("Drex4.png");
+                await Task.Delay(1000);
+                Hideout.setImage("RoomLaser6.png");
+                But2.appear(true);
+                But2.freeze();
+                await Task.Delay(1000);
+                But2.disappear();
+                Hideout.setImage("Drex5.png");
+                await Task.Delay(1000);
+                Hideout.setImage("Drex6.png");
+                await Task.Delay(1000);
+                Hideout.setImage("RoomLaser4.png");
+                But2.appear(true);
+                But2.freeze();
+                speak("Now I have to neutralize Drex...", 245, 160, 100, 40);
+                await Task.Delay(2000);
+                Tex.Visible = false;
+                But2.disappear();
+                Hideout.setImage("Drex7.png");
+                Timer.appear(true);
+                Timer.setImage("Time_00_04.png");
+                await Task.Delay(1000);
+                Timer.setImage("Time_00_03.png");
+                await Task.Delay(1000);
+                Timer.setImage("Time_00_02.png");
+                await Task.Delay(1000);
+                Timer.setImage("Time_00_01.png");
+                await Task.Delay(1000);
+                Timer.disappear();
+                Hideout.setImage("Drex8.png");
+                speak("Now I'll show you to mess with me...", 245, 160, 100, 40);
+                await Task.Delay(2000);
+                Tex.Visible = false;
+                Hideout.setImage("Drex9.png");
+                await Task.Delay(1000);
+                Hideout.setImage("Drex10.png");
+                await Task.Delay(1000);
+                BackToGame.setCoordinates(300, 350);
+                Lose11.disappear();
+                Lose10.disappear();
+                ButonPictura.variableAppear(true, Lose12, BackToGame);
+                return;
+            }
+            Hideout.setImage("RoomLaser2.png");
+            ButonPictura.variableFreeze(Guitar, Watergun, Flashlight, DreamBeam, Map, But2, RightArrow4);
+            NameOfObject.Visible = false;
+            Green.disappear();
+            await Task.Delay(1000);
+            ButonPictura.variableReactivate(Guitar, Watergun, Flashlight, DreamBeam, Map, But2, RightArrow4);
+            Hideout.setImage("RoomLaser.png");
+            return;
         }
 
         private async void DoorButton2Click(object arg1, EventArgs args)
@@ -989,6 +1045,18 @@ namespace Henry_Danger_saves_Jasper_remake
                 Hideout.setImage("RoomLaser.png");                                      
                 ButonPictura.variableDisappear(Lose11, BackToGame);
                 return;                
+            }
+
+            if (Lose12.isVisible())
+            {
+                ButonPictura.variableReactivate(Guitar, Watergun, Flashlight, DreamBeam, Map, RightArrow4, Transparent, But2);
+                RightArrow4.appear(true);
+                But2.appear(true);
+                Hideout.setImage("RoomLaser.png");               
+                But2.reactivate();
+                drex_attacked = 0;                                                          
+                ButonPictura.variableDisappear(Lose12, BackToGame);
+                return;
             }
         }
 
