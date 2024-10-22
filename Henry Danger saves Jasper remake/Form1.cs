@@ -19,6 +19,7 @@ namespace Henry_Danger_saves_Jasper_remake
             this.Height = 500;
         }
 
+        ButonPictura Presentation;
         ButonPictura Park;
         ButonPictura Subway;
         ButonPictura Hideout;
@@ -58,7 +59,7 @@ namespace Henry_Danger_saves_Jasper_remake
             Tex.BringToFront();
         }
         private void Form1_Load(object sender, EventArgs e)
-        {
+        {        
             Park = new ButonPictura("Park.png", 0, 0, 800, 480, this);
             Subway = new ButonPictura("Subway.png", 0, 0, 800, 480, this, SubwayClick);
             Hideout = new ButonPictura("Hideout.png", 0, 0, 800, 480, this);
@@ -133,6 +134,12 @@ namespace Henry_Danger_saves_Jasper_remake
             Transparent = new ButonPictura("Transparent.png", 10000, 10000, 500, 500, this, TransparentClick);
             Timer = new ButonPictura("Time_00_03.png", 354, 0, 92, 30, this);
             Timer.disappear();
+            Presentation = new ButonPictura("Presentation.png", 0, 0, 800, 480, this, PresentationClick);
+        }
+
+        private void PresentationClick(object arg1, EventArgs args)
+        {
+            Presentation.dispose();
         }
 
         private async void RightArrow4Click(object arg1, EventArgs args)
@@ -316,7 +323,12 @@ namespace Henry_Danger_saves_Jasper_remake
                 But2.disappear();
                 return;
             }
-            
+            speak("It's too high...", 245, 160, 100, 20);
+            ButonPictura.variableFreeze(Guitar, Watergun, Flashlight, DreamBeam, Map, RightArrow4, Transparent, But2);
+            await Task.Delay(2000);
+            Tex.Visible = false;
+            ButonPictura.variableReactivate(Guitar, Watergun, Flashlight, DreamBeam, Map, RightArrow4, Transparent, But2);
+            return;
         }
 
         private async void But2Click(object arg1, EventArgs args)
