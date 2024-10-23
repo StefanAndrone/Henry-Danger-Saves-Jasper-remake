@@ -39,7 +39,7 @@ namespace Henry_Danger_saves_Jasper_remake
         int jeff_blinded_with_flashlight = 0, jeff_attacked = 0;
         int message_read = 0;
         int slendy = 0;
-        int drex_attacked = 0;
+        int drex_attacked = 0, allowed2 = 0, drex_defeated = 0;
         private void textBox1_TextChanged_1(object sender, EventArgs e)
         {
 
@@ -148,6 +148,49 @@ namespace Henry_Danger_saves_Jasper_remake
             {
                 return;
             }
+            if(drex_defeated == 1)
+            {
+                Inventory.dispose();
+                Slot1.dispose();
+                Slot2.dispose();
+                Slot3.dispose();
+                Slot4.dispose();
+                Slot5.dispose();
+                Slot6.dispose();
+                Watergun.dispose();
+                Flashlight.dispose();
+                DreamBeam.dispose();
+                Guitar.dispose();
+                Map.dispose();
+                RightArrow4.dispose();
+                Hideout.setImage("Jasper.png");
+                speak("Jasper! You're alive!", 265, 160, 100, 20);
+                await Task.Delay(2000);
+                speak("I knew you'd come Henry! I can always count on you...", 455, 160, 100, 40);
+                await Task.Delay(3000);
+                speak("Where is Ray though?", 455, 160, 100, 30);
+                await Task.Delay(3000);
+                speak("Ray is on vacation...", 265, 160, 100, 20);
+                await Task.Delay(2000);
+                speak("Seriously???", 455, 160, 100, 20);
+                await Task.Delay(2000);
+                Hideout.setImage("Beach1.png");
+                speak("What a nice beach...", 365, 160, 100, 20);
+                await Task.Delay(2000);
+                Tex.Visible = false;
+                Hideout.setImage("Beach2.png");
+                await Task.Delay(1000);
+                speak("Hmm, obviously you don't need me anymore Toddler...", 565, 160, 100, 40);
+                await Task.Delay(3000);
+                Hideout.setImage("Beach3.png");
+                Tex.Visible = false;
+                await Task.Delay(1000);
+                speak("What is happening???", 365, 160, 100, 30);
+                await Task.Delay(3000);
+                Tex.Visible = false;
+                Hideout.setImage("Logo.png");
+                return;
+            }
             if(no_clicks_right_arrow_4 == 0)
             {
                 no_clicks_right_arrow_4 = 1;
@@ -186,10 +229,34 @@ namespace Henry_Danger_saves_Jasper_remake
             return;
         }
 
-        private void DreamBeamClick(object arg1, EventArgs args)
+        private async void DreamBeamClick(object arg1, EventArgs args)
         {
             if (DreamBeam.isFrozen())
             {
+                return;
+            }
+            if (allowed2 == 1)
+            {
+                drex_defeated = 1;
+                ButonPictura.variableFreeze(Watergun, DreamBeam, Flashlight, Guitar);
+                Green.disappear();
+                NameOfObject.Visible = false;
+                Lose12.dispose();
+                Lose11.dispose();
+                Timer.disappear();
+                speak("This is the end Drex...", 455, 160, 100, 40);
+                await Task.Delay(2000);
+                Tex.Visible = false;
+                Hideout.setImage("Drex11.png");
+                await Task.Delay(1000);
+                Hideout.setImage("Drex7.png");
+                speak("Finally! It's finally over...", 455, 160, 100, 30);
+                await Task.Delay(2000);
+                RightArrow4.appear(true);
+                RightArrow4.reactivate();
+                Tex.Visible = false;
+                But2.dispose();
+                ButonPictura.variableReactivate(Watergun, DreamBeam, Flashlight, Guitar, Map);
                 return;
             }
             if (Green.getP().Location.X + 7 == DreamBeam.getP().Location.X && Green.getP().Visible == true
@@ -365,6 +432,8 @@ namespace Henry_Danger_saves_Jasper_remake
                 Tex.Visible = false;
                 But2.disappear();
                 Hideout.setImage("Drex7.png");
+                allowed2 = 1;
+                ButonPictura.variableReactivate(DreamBeam, Watergun, Guitar, Flashlight);
                 Timer.appear(true);
                 Timer.setImage("Time_00_04.png");
                 await Task.Delay(1000);
@@ -375,6 +444,12 @@ namespace Henry_Danger_saves_Jasper_remake
                 Timer.setImage("Time_00_01.png");
                 await Task.Delay(1000);
                 Timer.disappear();
+                allowed2 = 0;
+                ButonPictura.variableFreeze(DreamBeam, Watergun, Guitar, Flashlight);
+                Green.disappear();
+                NameOfObject.Visible = false;
+                if (drex_defeated == 1)
+                    return;
                 Hideout.setImage("Drex8.png");
                 speak("Now I'll show you to mess with me...", 245, 160, 100, 40);
                 await Task.Delay(2000);
