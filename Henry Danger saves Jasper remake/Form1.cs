@@ -47,7 +47,7 @@ namespace Henry_Danger_saves_Jasper_remake
 
         int entrance = 0;
         int no_clicks_rightarrow3 = 0, turned = 0, six_thrown_wrong = 0, six_thrown_right = 0, time_jerker_defeated = 0, box2taken = 0;
-        int minyak_state = 0, allowed = 0, no_clicks_right_arrow_4 = 0;
+        int minyak_state = 0, allowed = 0, no_clicks_right_arrow_4 = 0, no_clicks = 0;
 
         public void speak(String text, int x, int y, int width, int height)
         {
@@ -139,6 +139,12 @@ namespace Henry_Danger_saves_Jasper_remake
 
         private void PresentationClick(object arg1, EventArgs args)
         {
+            if(no_clicks == 0)
+            {
+                Presentation.setImage("Instructions.png");
+                no_clicks = 1;
+                return;
+            }
             Presentation.dispose();
         }
 
